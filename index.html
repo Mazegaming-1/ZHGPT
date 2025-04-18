@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ZHgpt - Powered by ChatGPT</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .chatbox {
+      max-width: 600px;
+      margin: auto;
+      background: #1f1f1f;
+      padding: 20px;
+      border-radius: 15px;
+    }
+    #chat {
+      height: 300px;
+      overflow-y: auto;
+      text-align: left;
+      padding: 10px;
+      background-color: #222;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    input, button {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
+    }
+    input {
+      width: 70%;
+    }
+    button {
+      background-color: #00ffcc;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🤖 Welcome to ZHgpt</h1>
+  <div class="chatbox">
+    <div id="chat"></div>
+    <input type="text" id="userInput" placeholder="Ask anything..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chat = document.getElementById("chat");
+      const message = input.value.trim();
+      if (!message) return;
+
+      chat.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+      input.value = "";
+
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+      chat.innerHTML += `<p><strong>ZHgpt:</strong> ${data.reply}</p>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
